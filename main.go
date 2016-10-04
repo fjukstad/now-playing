@@ -2,8 +2,13 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"net/http"
 	"os/exec"
 	"strings"
+	"text/template"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -16,6 +21,34 @@ func main() {
 
 	fmt.Println(GetCurrent())
 
+	r := mux.NewRouter()
+	r.HandleFunc("/", SongHandler)
+	r.HandleFunc("/public/{folder}/{file}", PublicHandler)
+
+	fmt.Println("localhost:8000")
+	err = http.ListenAndServe(":8000", r)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+}
+
+var indexTemplate = template.Must(template.ParseFiles("index.html"))
+
+func SongHandler(w http.ResponseWriter, r *http.Request) {
+	artist, track := GetCurrent()
+	np := NowPlaying{artist, track, "stock-photo.png"}
+
+	indexTemplate.Execute(w, np)
+
+}
+
+type NowPlaying struct {
+	Artist string
+	Track  string
+	Image  string
 }
 
 func GetCurrent() (artist, track string) {
@@ -35,4 +68,20 @@ func GetCurrent() (artist, track string) {
 		}
 	}
 	return artist, track
+}
+
+func PublicHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	folder := vars["folder"]
+	file := vars["file"]
+
+	base := "public/"
+	filename := base + folder + "/" + file
+
+	f, err := ioutil.ReadFile(filename)
+	if err != nil {
+		w.Write([]byte("Could not find file " + filename))
+	} else {
+		w.Write(f)
+	}
 }
