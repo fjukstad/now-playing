@@ -5,6 +5,7 @@ well together with my [doing a phd playlist](https://open.spotify.com/user/bjorn
 ![screenshot.png](screenshot.png)
 ![screenshot2.png](screenshot2.png)
 ![screenshot3.png](screenshot3.png)
+![screenshot4.png](screenshot4.png)
 
 # how
 - install [go (set up your $GOPATH etc.)](http://golang.org), [spotify](http://spotify.com) and [shpotify](https://github.com/hnarayanan/shpotify). 
