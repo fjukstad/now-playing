@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
+	"math/rand"
 	"net/http"
 	"os/exec"
 	"strings"
@@ -15,17 +17,15 @@ func main() {
 	cmd := exec.Command("spotify")
 	err := cmd.Run()
 	if err != nil {
-		fmt.Println("Please install shpotify", err)
+		fmt.Println("Please install shpotify: 'brew install shpotify'", err)
 		return
 	}
-
-	fmt.Println(GetCurrent())
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", SongHandler)
 	r.HandleFunc("/public/{folder}/{file}", PublicHandler)
 
-	fmt.Println("localhost:8000")
+	fmt.Println("Server started on localhost:8000")
 	err = http.ListenAndServe(":8000", r)
 
 	if err != nil {
@@ -39,7 +39,15 @@ var indexTemplate = template.Must(template.ParseFiles("index.html"))
 
 func SongHandler(w http.ResponseWriter, r *http.Request) {
 	artist, track := GetCurrent()
-	np := NowPlaying{artist, track, "stock-photo.png"}
+
+	files, err := ioutil.ReadDir("public/img")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	randomFile := files[rand.Intn(len(files))]
+
+	np := NowPlaying{artist, track, randomFile.Name()}
 
 	indexTemplate.Execute(w, np)
 
