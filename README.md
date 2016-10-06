@@ -9,7 +9,8 @@ well together with my [doing a phd playlist](https://open.spotify.com/user/bjorn
 # how
 - install [go (set up your $GOPATH etc.)](http://golang.org), [spotify](http://spotify.com) and [shpotify](https://github.com/hnarayanan/shpotify). 
 - play a song on spotify
-- run `now-playing`. 
+- `go get github.com/fjukstad/now-playing`
+- `now-playing`. 
 - visit [localhost:8000](http://localhost:8080) in your web browser. 
 
 # todo
