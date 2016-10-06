@@ -6,6 +6,11 @@ well together with my [doing a phd playlist](https://open.spotify.com/user/bjorn
 ![screenshot2.png](screenshot2.png)
 ![screenshot3.png](screenshot3.png)
 
+# how
+- install [go (set up your $GOPATH etc.)](http://golang.org) and [shpotify](https://github.com/hnarayanan/shpotify). 
+- run `now-playing`. 
+- visit [localhost:8000](http://localhost:8080) in your web browser. 
+
 # todo
 
 - [ ] update image when the song chages

@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"os/exec"
 	"strings"
 	"text/template"
@@ -35,12 +36,15 @@ func main() {
 
 }
 
-var indexTemplate = template.Must(template.ParseFiles("index.html"))
+func getPath() string {
+	return os.Getenv("GOPATH") + "/src/github.com/fjukstad/now-playing"
+}
 
 func SongHandler(w http.ResponseWriter, r *http.Request) {
 	artist, track := GetCurrent()
 
-	files, err := ioutil.ReadDir("public/img")
+	path := getPath()
+	files, err := ioutil.ReadDir(path + "/public/img")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,6 +53,7 @@ func SongHandler(w http.ResponseWriter, r *http.Request) {
 
 	np := NowPlaying{artist, track, randomFile.Name()}
 
+	indexTemplate := template.Must(template.ParseFiles(path + "/index.html"))
 	indexTemplate.Execute(w, np)
 
 }
@@ -83,7 +88,8 @@ func PublicHandler(w http.ResponseWriter, r *http.Request) {
 	folder := vars["folder"]
 	file := vars["file"]
 
-	base := "public/"
+	path := getPath()
+	base := path + "/public/"
 	filename := base + folder + "/" + file
 
 	f, err := ioutil.ReadFile(filename)
