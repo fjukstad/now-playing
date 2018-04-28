@@ -43,13 +43,24 @@
         </style>
     </head>
     <body>
-        <h1> {{ .Track}} </br> </br>
+        <h1 id="nowplaying">  {{ .Track}} </br> </br>
           - {{ .Artist }} - 
         </h1>
         <div class="image">
             <img src="/public/img/{{ .Image }}"></img> 
         </div>
     </body>
+
+    <script> 
+
+    var ws = new WebSocket("ws://localhost:8000/live");
+    ws.onmessage = function(evt) {
+        artist = evt.data.split(",")[0]
+        track = evt.data.split(",")[1]
+        document.getElementById("nowplaying").innerHTML = track +"</br></br>" + artist 
+    }
+
+    </script> 
 
 
 </html>

@@ -25,6 +25,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", SongHandler)
 	r.HandleFunc("/public/{folder}/{file}", PublicHandler)
+	r.HandleFunc("/live", live)
 
 	fmt.Println("Server started on localhost:8000")
 	err = http.ListenAndServe(":8000", r)
